@@ -1,0 +1,34 @@
+
+#Created by Constraints Editor (xc3s100e-cp132-4) - 2017/03/22
+NET "clk_50" TNM_NET = "clk_50";
+TIMESPEC TS_clk_50 = PERIOD "clk_50" 20 ns HIGH 50 %;
+
+# PlanAhead Generated physical constraints 
+
+NET "Alarm" LOC = G1;
+NET "Clock_Led" LOC = P4;
+NET "Led[5]" LOC = N4;
+NET "Led[4]" LOC = N5;
+NET "Led[3]" LOC = P6;
+NET "Led[2]" LOC = P7;
+NET "Led[1]" LOC = M11;
+NET "Led[0]" LOC = M5;
+NET "Show[6]" LOC = M12;
+NET "Show[5]" LOC = L13;
+NET "Show[4]" LOC = P12;
+NET "Show[3]" LOC = N11;
+NET "Show[2]" LOC = N14;
+NET "Show[1]" LOC = H12;
+NET "Show[0]" LOC = L14;
+NET "AN0" LOC = F12;
+NET "AN1" LOC = J12;
+NET "AN2" LOC = M13;
+NET "AN3" LOC = K14;
+NET "Adj_Hour" LOC = B4;
+NET "Adj_Min" LOC = K3;
+NET "clk_50" LOC = B8;
+NET "en" LOC = L3;
+NET "ncr" LOC = P11;
+NET "setAL" LOC = E2;
+NET "SwitchAL" LOC = N3;
+NET "Switch12" LOC = F3;
