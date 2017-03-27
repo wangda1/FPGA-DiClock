@@ -50,7 +50,8 @@ module top(clk_50,ncr,en,setAL,SwitchAL,Switch12,Adj_Min,Adj_Hour,Show,AN0,AN1,A
 	wire clk_1;
 	reg Clock_Led_En;     					//整点报时使能信号
 	reg Clock_Led_Temp1;
-	wire Clock_Led_Temp;
+	reg[5:0]Clock_Led_Cnt;					//整点报时计次信号
+	wire Clock_Led_Temp;						//整点报时 时信号 
 	
 //----------------------------------------------分频--------------------------------------------------
 Divider50MHz U0(.clk_50M(clk_50),
@@ -73,7 +74,7 @@ assign MinH_En = ((!setAL)&&Adj_Min)?(Minute[3:0]==4'd9):((Minute[3:0]==4'd9)&&(
 
 assign Hour_En = ((!setAL)&&Adj_Hour)?Vdd:((Minute==8'b0101_1001)&&(Second==8'b0101_1001));
 //----------------------------------------------整点报时-------------------------------------------------
-//利用Hour_En,MinL_En信号来判断是否是整点,Show_Hour用来判断与Second是否相同来表示闪的次数
+//利用Hour_En信号来判断是否是整点,Show_Hour用来判断与Clock_Led_Cnt是否相同来表示闪的次数
 always@(Show_Hour[5:4])
 begin
 	case(Show_Hour[5:4])
@@ -83,15 +84,17 @@ begin
 		default:Clock_Led_Temp1 = 5'd0;
 	endcase
 end
-assign Clock_Led_Temp = Clock_Led_Temp1 + Show_Hour[3:0];
+
+assign Clock_Led_Temp = Clock_Led_Temp1 + Show_Hour[3:0] + Clock_Led_Temp1 + Show_Hour[3:0];
+
 always@(posedge clk_1)
 begin
-	if(Hour_En == 1)
-		Clock_Led_En <= 1;
-	else if(Clock_Led_Temp == Second[3:0])
-		Clock_Led_En <= 0;
+	if((!Adj_Min)&&(!Adj_Hour)&&(Hour_En))
+		begin Clock_Led_En <= 1;Clock_Led_Cnt <= 6'd0;end
+	else if(Clock_Led_Temp == Clock_Led_Cnt)
+		begin Clock_Led_En <= 0;Clock_Led_Cnt <= 6'd0;end
 	else
-		Clock_Led_En <= Clock_Led_En;
+		begin Clock_Led_En <= Clock_Led_En;Clock_Led_Cnt <= Clock_Led_Cnt + 1'b1;end
 end
 
 assign Clock_Led = Clock_Led_En?Second[0]:Gnd;
